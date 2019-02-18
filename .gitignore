@@ -1,6 +1,9 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+#Include DroneGame, whatever that is
+!DroneGame
+
 # Compiled Object files
 *.slo
 *.lo
