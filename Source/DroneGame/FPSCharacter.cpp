@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FPSCharacter.h"
+#include "CoreMinimal.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -40,6 +41,10 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	//Set up 'look' binds
 	PlayerInputComponent->BindAxis("Turn",this,&AFPSCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp",this,&AFPSCharacter::AddControllerPitchInput);
+
+	//Set up 'action' bindings
+	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&AFPSCharacter::StartJump);
+	PlayerInputComponent->BindAction("Jump",IE_Released,this,&AFPSCharacter::StopJump);
 }
 
 void AFPSCharacter::MoveForward(float Value){
@@ -52,4 +57,13 @@ void AFPSCharacter::MoveRight(float Value){
 	// Find out which way is "right" and record that the player wants to move that way.
     FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
     AddMovementInput(Direction, Value);
+}
+
+
+void AFPSCharacter::StartJump(){
+	bPressedJump = true;
+}
+
+void AFPSCharacter::StopJump(){
+	bPressedJump = false;
 }

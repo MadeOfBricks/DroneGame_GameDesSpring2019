@@ -34,4 +34,13 @@ public:
 	UFUNCTION()
 	void MoveRight(float Value);
 
+	
+	//Sets jump flag when pressed
+	UFUNCTION()
+	void StartJump();
+
+	//Sets jump flag when released
+	UFUNCTION()
+	void StopJump();
+
 };
