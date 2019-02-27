@@ -27,7 +27,7 @@ void AFloatingActor::Tick(float DeltaTime)
 	float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
 	NewLocation.Z += DeltaHeight * 20.0f;       //Scale our height by a factor of 20
 	RunningTime += DeltaTime;
-	UE_LOG(LogTemp, Warning, TEXT("Floating Actor ticking: New height = %f"), NewLocation.Z);
+	//UE_LOG(LogTemp, Warning, TEXT("Floating Actor ticking: New height = %f"), NewLocation.Z);
 	SetActorLocation(NewLocation);
 }
 
