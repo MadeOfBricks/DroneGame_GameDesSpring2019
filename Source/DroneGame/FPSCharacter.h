@@ -29,7 +29,10 @@ public:
 	
 	//Handles forward-backward input
 	UFUNCTION()
-	void MoveForward(float Value);
+	void MoveForwardStart(float Value);
+
+	UFUNCTION()
+	void MoveForwardStop(float Value);
 
 	//Handles right-left input
 	UFUNCTION()
