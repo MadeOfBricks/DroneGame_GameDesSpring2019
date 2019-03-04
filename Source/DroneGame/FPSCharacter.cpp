@@ -19,6 +19,18 @@ AFPSCharacter::AFPSCharacter()
 	// Allow pawn to control cam rotation
 	FPSCameraComponent->bUsePawnControlRotation = true;
 
+	//Create FPS Mesh component for owning player
+	FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+	//Only the owning player sees this mesh
+	FPSMesh->SetOnlyOwnerSee(true);
+	FPSMesh->SetupAttachment(FPSCameraComponent);
+	//Disable some enivron shadowing to preserve the illusion of one mesh
+	FPSMesh->bCastDynamicShadow = false;
+	FPSMesh->CastShadow = false;
+
+	//The owning player doesn't see regular body mesh
+	GetMesh()->SetOwnerNoSee(true);
+
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +42,9 @@ void AFPSCharacter::BeginPlay()
 		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
 	}
+	//The owning player doesn't see regular body mesh
+	GetMesh()->SetOwnerNoSee(true);
+
 }
 
 // Called every frame

@@ -47,4 +47,10 @@ public:
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)
     UCameraComponent* FPSCameraComponent;
+
+	// FPS Mesh, visible only to the one that owns it
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+    USkeletalMeshComponent* FPSMesh;
+
+
 };
