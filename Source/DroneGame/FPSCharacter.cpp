@@ -53,6 +53,10 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!GetCharacterMovement()->IsFalling()){
+		//bPressedJump = true;
+	};
+
 }
 
 // Called to bind functionality to input
@@ -77,7 +81,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AFPSCharacter::MoveForward(float Value){
 	// Find out which way is "forward" and record that the player wants to move that way.
-    FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+    
+	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
     AddMovementInput(Direction, Value);
 }
 
@@ -98,7 +103,10 @@ void AFPSCharacter::StopJump(){
 
 void AFPSCharacter::Fire()
 {
+	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X) * 100000;
+	GetCharacterMovement()->AddImpulse(Direction,false);
 	//Attempt to fire a projectile
+	/*
 	if(ProjectileClass)
 	{
 		//Get camera transform
@@ -126,4 +134,5 @@ void AFPSCharacter::Fire()
 		}
 
 	}
+	*/
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -64,5 +65,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AFPSProjectile> ProjectileClass;
 
+	//Movement Component
+	//UPROPERTY(EditAnywhere)
+	//UCharacterMovementComponent* MovComponent = GetMovementComponent();
 
 };
