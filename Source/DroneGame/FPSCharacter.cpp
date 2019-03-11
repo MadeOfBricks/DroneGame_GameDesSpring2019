@@ -4,6 +4,7 @@
 #include "FPSProjectile.h"
 #include "Camera/CameraComponent.h"
 #include "CoreMinimal.h"
+#include <string>
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -65,7 +66,6 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	//Set up 'movement' bindings
-	PlayerInputComponent->BindAxis("MoveForward",this,&AFPSCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight",this,&AFPSCharacter::MoveRight);
 
 	//Set up 'look' binds
@@ -76,14 +76,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&AFPSCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump",IE_Released,this,&AFPSCharacter::StopJump);
 
-	PlayerInputComponent->BindAction("Fire",IE_Pressed,this,&AFPSCharacter::Fire);
-}
-
-void AFPSCharacter::MoveForward(float Value){
-	// Find out which way is "forward" and record that the player wants to move that way.
-    
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-    AddMovementInput(Direction, Value);
+	PlayerInputComponent->BindAction("FireLeft",IE_Released,this,&AFPSCharacter::FireLeft);
+	PlayerInputComponent->BindAction("FireRight",IE_Released,this,&AFPSCharacter::FireRight);
 }
 
 void AFPSCharacter::MoveRight(float Value){
@@ -101,10 +95,68 @@ void AFPSCharacter::StopJump(){
 	bPressedJump = false;
 }
 
-void AFPSCharacter::Fire()
+void AFPSCharacter::FireLeft()
+{	
+	bool validInput = false;
+	if (lastClicked == NULL) {
+		lastClicked = MouseButton::LEFT;
+		validInput = true;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: left. Last clicked: null."));
+	} else if (lastClicked == MouseButton::LEFT) {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: left. Last clicked: left."));
+		validInput = false;
+	} else if (lastClicked == MouseButton::RIGHT) { 
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: left. Last clicked: right."));
+		lastClicked = MouseButton::LEFT;
+		validInput = true;
+	} else {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("This should never happen."));
+	}
+	if (validInput) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Valid Input"));
+		}
+		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+		GetCharacterMovement()->AddImpulse(Direction,false);
+	} else
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Input invalid."));
+}
+
+void AFPSCharacter::FireRight()
 {
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X) * 100000;
-	GetCharacterMovement()->AddImpulse(Direction,false);
+	bool validInput = false;
+	if (lastClicked == NULL) {
+		lastClicked = MouseButton::RIGHT;
+		validInput = true;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: right. Last clicked: null."));
+	} else if (lastClicked == MouseButton::LEFT) {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: right. Last clicked: left."));
+		lastClicked = MouseButton::RIGHT;
+		validInput = true;
+	} else if (lastClicked == MouseButton::RIGHT) {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: right. Last clicked: right."));
+			validInput = false;
+	} else {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("This should never happen."));
+	}
+	if (validInput) {
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Input Valid."));
+		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+		GetCharacterMovement()->AddImpulse(Direction,false);
+	} else
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Input invalid."));
+}
 	//Attempt to fire a projectile
 	/*
 	if(ProjectileClass)
@@ -135,4 +187,3 @@ void AFPSCharacter::Fire()
 
 	}
 	*/
-}

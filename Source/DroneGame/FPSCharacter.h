@@ -12,7 +12,6 @@ UCLASS()
 class DRONEGAME_API AFPSCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 public:
 	// Sets default values for this character's properties
 	AFPSCharacter();
@@ -28,10 +27,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	//Handles forward-backward input
-	UFUNCTION()
-	void MoveForward(float Value);
-
 	//Handles right-left input
 	UFUNCTION()
 	void MoveRight(float Value);
@@ -45,9 +40,11 @@ public:
 	UFUNCTION()
 	void StopJump();
 
-	// Projectile firing
+	// Move forward on alternating mouse clicks
 	UFUNCTION()
-	void Fire();
+	void FireLeft();
+	UFUNCTION()
+	void FireRight();
 
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)
@@ -69,4 +66,7 @@ public:
 	//UPROPERTY(EditAnywhere)
 	//UCharacterMovementComponent* MovComponent = GetMovementComponent();
 
+	//Force alternating mouse clicks
+	enum MouseButton { LEFT, RIGHT };
+	int lastClicked = NULL;
 };
