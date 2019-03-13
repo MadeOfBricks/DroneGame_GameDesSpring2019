@@ -67,6 +67,6 @@ public:
 	//UCharacterMovementComponent* MovComponent = GetMovementComponent();
 
 	//Force alternating mouse clicks
-	enum MouseButton { LEFT, RIGHT };
-	int lastClicked = NULL;
+	enum MouseButton { LEFT, RIGHT, NONE };
+	MouseButton lastClicked = NONE;
 };
