@@ -121,7 +121,7 @@ void AFPSCharacter::FireLeft()
 			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, TEXT("Input Valid"));
 		}
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-		GetCharacterMovement()->AddImpulse(Direction, false);
+		GetCharacterMovement()->AddImpulse(Direction*100000, false);
 		// LaunchCharacter(Direction, true, false);
 
 	} else
@@ -154,7 +154,7 @@ void AFPSCharacter::FireRight()
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Input Valid."));
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-		GetCharacterMovement()->AddImpulse(Direction*50, false);
+		GetCharacterMovement()->AddImpulse(Direction*100000, false);
 	} else
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Input invalid."));
