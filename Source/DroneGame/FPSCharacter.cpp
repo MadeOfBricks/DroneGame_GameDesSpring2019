@@ -6,6 +6,14 @@
 #include "CoreMinimal.h"
 #include <string>
 
+
+bool DEBUG = false;
+
+void debug(FColor color, const FString message) {
+	if (GEngine && DEBUG)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, message);
+}
+
 // Sets default values
 AFPSCharacter::AFPSCharacter()
 {
@@ -39,11 +47,7 @@ AFPSCharacter::AFPSCharacter()
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	if (GEngine)
-	{
-		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
-	}
+	debug(FColor::Green, FString("We are using FPSCharacter."));
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
 
@@ -101,32 +105,24 @@ void AFPSCharacter::FireLeft()
 	if (lastClicked == MouseButton::NONE) {
 		lastClicked = MouseButton::LEFT;
 		validInput = true;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Registered: left. Last clicked: none."));
+		debug(FColor::Green, TEXT("Registered: left. Last clicked: none."));
 	} else if (lastClicked == MouseButton::LEFT) {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: left. Last clicked: left."));
+		debug(FColor::Red, TEXT("Registered: left. Last clicked: left."));
 		validInput = false;
 	} else if (lastClicked == MouseButton::RIGHT) { 
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Registered: left. Last clicked: right."));
+		debug(FColor::Green, TEXT("Registered: left. Last clicked: right."));
 		lastClicked = MouseButton::LEFT;
 		validInput = true;
 	} else {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("This should never happen."));
+		debug(FColor::Red, TEXT("This should never happen."));
 	}
 	if (validInput) {
-		if (GEngine) {
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, TEXT("Input Valid"));
-		}
+		debug(FColor::Green, TEXT("Input Valid"));
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+		Direction.Z = 0;
 		GetCharacterMovement()->AddImpulse(Direction*100000, false);
-		// LaunchCharacter(Direction, true, false);
-
 	} else
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Input invalid."));
+		debug(FColor::Red, TEXT("Input invalid."));
 }
 
 void AFPSCharacter::FireRight()
@@ -135,29 +131,24 @@ void AFPSCharacter::FireRight()
 	if (lastClicked == MouseButton::NONE) {
 		lastClicked = MouseButton::RIGHT;
 		validInput = true;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Registered: right. Last clicked: none."));
+		debug(FColor::Green, TEXT("Registered: right. Last clicked: none."));
 	} else if (lastClicked == MouseButton::LEFT) {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Registered: right. Last clicked: left."));
+		debug(FColor::Green, TEXT("Registered: right. Last clicked: left."));
 		lastClicked = MouseButton::RIGHT;
 		validInput = true;
 	} else if (lastClicked == MouseButton::RIGHT) {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Registered: right. Last clicked: right."));
-			validInput = false;
+		debug(FColor::Red, TEXT("Registered: right. Last clicked: right."));
+		validInput = false;
 	} else {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("This should never happen."));
+		debug(FColor::Red, TEXT("This should never happen."));
 	}
 	if (validInput) {
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Input Valid."));
+		debug(FColor::Green, TEXT("Input Valid."));
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+		Direction.Z = 0;
 		GetCharacterMovement()->AddImpulse(Direction*100000, false);
 	} else
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Input invalid."));
+	debug(FColor::Red, TEXT("Input invalid."));
 }
 	//Attempt to fire a projectile
 	/*
