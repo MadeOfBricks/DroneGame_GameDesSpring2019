@@ -31,7 +31,6 @@ public:
 	UFUNCTION()
 	void MoveRight(float Value);
 
-	
 	//Sets jump flag when pressed
 	UFUNCTION()
 	void StartJump();
@@ -45,6 +44,12 @@ public:
 	void FireLeft();
 	UFUNCTION()
 	void FireRight();
+
+	// Enable crouching on s press, disable on release.
+	UFUNCTION()
+	void StartCrouch();
+	UFUNCTION()
+	void StopCrouch();
 
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)

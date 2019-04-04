@@ -8,6 +8,7 @@
 
 
 bool DEBUG = false;
+bool SLIDING = false;
 
 void debug(FColor color, const FString message) {
 	if (GEngine && DEBUG)
@@ -82,6 +83,9 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction("FireLeft",IE_Released,this,&AFPSCharacter::FireLeft);
 	PlayerInputComponent->BindAction("FireRight",IE_Released,this,&AFPSCharacter::FireRight);
+
+	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&AFPSCharacter::StartCrouch);
+	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&AFPSCharacter::StopCrouch);
 }
 
 void AFPSCharacter::MoveRight(float Value){
@@ -119,8 +123,11 @@ void AFPSCharacter::FireLeft()
 	if (validInput) {
 		debug(FColor::Green, TEXT("Input Valid"));
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-		Direction.Z = 0;
-		GetCharacterMovement()->AddImpulse(Direction*100000, false);
+		if (GetCharacterMovement()->Velocity.Z < 0)
+			Direction.Z = 0;
+
+		if (!SLIDING)
+		    GetCharacterMovement()->Velocity = Direction*10000;
 	} else
 		debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -145,11 +152,33 @@ void AFPSCharacter::FireRight()
 	if (validInput) {
 		debug(FColor::Green, TEXT("Input Valid."));
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-		Direction.Z = 0;
-		GetCharacterMovement()->AddImpulse(Direction*100000, false);
+		if (GetCharacterMovement()->Velocity.Z < 0)
+			Direction.Z = 0;
+		if (!SLIDING)
+			GetCharacterMovement()->Velocity = Direction*10000;
 	} else
 	debug(FColor::Red, TEXT("Input invalid."));
 }
+
+void AFPSCharacter::StartCrouch()
+{
+	GetCharacterMovement()->Velocity *= 2;
+	SLIDING = true;
+	debug(FColor::Green, TEXT("Crouch Start"));
+	GetCharacterMovement()->BrakingFriction = 0.1;		
+	GetCharacterMovement()->GroundFriction = 0.1;		
+	GetCharacterMovement()->bWantsToCrouch = true;
+}
+
+void AFPSCharacter::StopCrouch()
+{
+	SLIDING = false;
+	debug(FColor::Green, TEXT("Crouch Stop"));
+	GetCharacterMovement()->BrakingFriction = 2.0;
+	GetCharacterMovement()->GroundFriction = 2.0;		
+	GetCharacterMovement()->bWantsToCrouch = false;
+}
+
 	//Attempt to fire a projectile
 	/*
 	if(ProjectileClass)
