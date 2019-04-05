@@ -2,6 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
+#include "Engine/Classes/GameFramework/CharacterMovementComponent.h"
+#include "Engine/Classes/GameFramework/Character.h"
+#include "Engine/Classes/Components/PrimitiveComponent.h"
 #include "ALiftTrigger.generated.h"
 
 UCLASS()
