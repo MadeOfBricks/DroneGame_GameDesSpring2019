@@ -7,7 +7,7 @@
 #include <string>
 
 
-bool DEBUG = false;
+bool DEBUG = true;
 bool SLIDING = false;
 
 void debug(FColor color, const FString message) {
@@ -177,6 +177,12 @@ void AFPSCharacter::StopCrouch()
 	GetCharacterMovement()->BrakingFriction = 2.0;
 	GetCharacterMovement()->GroundFriction = 2.0;		
 	GetCharacterMovement()->bWantsToCrouch = false;
+}
+
+void AFPSCharacter::LaunchUp()
+{
+	GetCharacterMovement()->AddImpulse(FVector(1,1,200000), false);
+	debug(FColor::Green, TEXT("Launched character"));
 }
 
 	//Attempt to fire a projectile
