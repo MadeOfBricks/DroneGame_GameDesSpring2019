@@ -51,6 +51,9 @@ public:
 	UFUNCTION()
 	void StopCrouch();
 
+	UFUNCTION()
+	void LaunchUp();
+
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)
     UCameraComponent* FPSCameraComponent;
