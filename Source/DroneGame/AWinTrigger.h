@@ -2,13 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
-#include "Engine/Classes/GameFramework/CharacterMovementComponent.h"
-#include "Engine/Classes/GameFramework/Character.h"
-#include "Engine/Classes/Components/PrimitiveComponent.h"
-#include "ALiftTrigger.generated.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformMisc.h"
+#include "AWinTrigger.generated.h"
 
 UCLASS()
-class ALiftTriggerBox : public ATriggerBox
+class AWinTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
 	
@@ -16,7 +14,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 public:
-	ALiftTriggerBox();
+	AWinTriggerBox();
 	
 	UFUNCTION()
 	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
@@ -24,3 +22,4 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
 };
+
