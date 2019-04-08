@@ -20,12 +20,6 @@ void ALiftTriggerBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor
 {
 	if (OtherActor && (OtherActor != this)) {
 		UE_LOG(LogTemp, Warning, TEXT("Overlap begin"));
-		// not working. may try to move actor to top of trigger box when overlap begins
-		FVector newLocation = OverlappedActor->GetActorLocation();
-		newLocation.Z += 250000.0;
-		SetActorLocation(newLocation, false);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Z value from SET: %f"), newLocation.Z));
-		//GetCharacterMovement()->AddImpulse(newLocation*100000, true);
 	}
 }
 

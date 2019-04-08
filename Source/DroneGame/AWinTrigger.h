@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformMisc.h"
 #include "AWinTrigger.generated.h"
 
 UCLASS()
