@@ -7,7 +7,7 @@
 #include <string>
 
 
-bool DEBUG = true;
+bool DEBUG = false;
 bool SLIDING = false;
 
 void debug(FColor color, const FString message) {
@@ -127,7 +127,7 @@ void AFPSCharacter::FireLeft()
 			Direction.Z = 0;
 
 		if (!SLIDING)
-		    GetCharacterMovement()->Velocity = Direction*10000;
+		    GetCharacterMovement()->Velocity = Direction*2000;
 	} else
 		debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -155,7 +155,7 @@ void AFPSCharacter::FireRight()
 		if (GetCharacterMovement()->Velocity.Z < 0)
 			Direction.Z = 0;
 		if (!SLIDING)
-			GetCharacterMovement()->Velocity = Direction*10000;
+			GetCharacterMovement()->Velocity = Direction*2000;
 	} else
 	debug(FColor::Red, TEXT("Input invalid."));
 }
