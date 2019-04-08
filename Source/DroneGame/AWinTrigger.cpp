@@ -26,7 +26,7 @@ void AWinTriggerBox::OnOverlapEnd(class AActor* OverlappedActor, class AActor* O
 {
 	if (OtherActor && (OtherActor != this)) {
 		UE_LOG(LogTemp, Warning, TEXT("Game over"));
-		// exits the editor entirely
-		// FGenericPlatformMisc::RequestExit(false);
+		//exits the editor entirely
+		FGenericPlatformMisc::RequestExit(false);
 	}
 }
