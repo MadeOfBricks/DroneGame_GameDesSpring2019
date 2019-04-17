@@ -5,9 +5,10 @@
 #include "Camera/CameraComponent.h"
 #include "CoreMinimal.h"
 #include <string>
+#include "DrawDebugHelpers.h"
 
 
-bool DEBUG = false;
+bool DEBUG = true;
 bool SLIDING = false;
 
 void debug(FColor color, const FString message) {
@@ -51,6 +52,7 @@ void AFPSCharacter::BeginPlay()
 	debug(FColor::Green, FString("We are using FPSCharacter."));
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
+	GetCharacterMovement()->JumpZVelocity = 400;
 
 }
 
@@ -86,6 +88,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&AFPSCharacter::StartCrouch);
 	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&AFPSCharacter::StopCrouch);
+
+	PlayerInputComponent->BindAction("Grapple",IE_Pressed,this,&AFPSCharacter::Grapple);
 }
 
 void AFPSCharacter::MoveRight(float Value){
@@ -181,8 +185,30 @@ void AFPSCharacter::StopCrouch()
 
 void AFPSCharacter::LaunchUp()
 {
-	GetCharacterMovement()->AddImpulse(FVector(1,1,200000), false);
+	GetCharacterMovement()->AddImpulse(FVector(1,1,100000), false);
 	debug(FColor::Green, TEXT("Launched character"));
+}
+
+void AFPSCharacter::Grapple()
+{
+	debug(FColor::Green, TEXT("Grappling called"));
+	FVector startTrace = GetController()->GetPawn()->GetActorLocation();
+	FVector endTrace = startTrace + GetControlRotation().Vector() * 2560;
+	FHitResult HitData = FHitResult(ForceInit);
+	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
+	//TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
+	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel2));
+	if (DEBUG) {
+		DrawDebugLine(GetWorld(), startTrace, endTrace, FColor::Green, false, 1.0, 3, 5.0);
+		// LaunchCharacter(GetActorLocation() - endTrace, false, false);
+	}
+	if (GetWorld()->LineTraceSingleByObjectType(HitData, startTrace, endTrace, TraceObjectTypes, NULL)) {
+		debug(FColor::Green, TEXT("Trace Successful"));
+		GetCharacterMovement()->GravityScale = 0.05;
+		LaunchCharacter((HitData.Location - startTrace), false, false);
+		GetCharacterMovement()->GravityScale = 1;
+		GetCharacterMovement()->AddImpulse(FVector(1,1,1000000));
+	}
 }
 
 	//Attempt to fire a projectile
