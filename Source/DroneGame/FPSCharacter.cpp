@@ -204,10 +204,11 @@ void AFPSCharacter::Grapple()
 	}
 	if (GetWorld()->LineTraceSingleByObjectType(HitData, startTrace, endTrace, TraceObjectTypes, NULL)) {
 		debug(FColor::Green, TEXT("Trace Successful"));
-		GetCharacterMovement()->GravityScale = 0.05;
-		LaunchCharacter((HitData.Location - startTrace), false, false);
+		GetCharacterMovement()->GravityScale = 0.01;
+		FVector LaunchVector = HitData.Location - startTrace;
+		LaunchVector.Z += 300;
+		LaunchCharacter(LaunchVector, false, false);
 		GetCharacterMovement()->GravityScale = 1;
-		GetCharacterMovement()->AddImpulse(FVector(1,1,1000000));
 	}
 }
 
