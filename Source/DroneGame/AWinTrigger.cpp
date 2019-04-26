@@ -13,7 +13,7 @@ void AWinTriggerBox::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Purple, true, -1, 0, 5);
+	DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Purple, true, 10, 0, 5);
 }
 
 void AWinTriggerBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor)
