@@ -130,8 +130,10 @@ void AFPSCharacter::FireLeft()
 		if (GetCharacterMovement()->Velocity.Z < 0)
 			Direction.Z = 0;
 
-		if (!SLIDING)
+		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 		    GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING)
+			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
 		debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -158,8 +160,10 @@ void AFPSCharacter::FireRight()
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 		if (GetCharacterMovement()->Velocity.Z < 0)
 			Direction.Z = 0;
-		if (!SLIDING)
+		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 			GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING)
+			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
 	debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -185,7 +189,7 @@ void AFPSCharacter::StopCrouch()
 
 void AFPSCharacter::LaunchUp()
 {
-	GetCharacterMovement()->AddImpulse(FVector(1,1,100000), false);
+	GetCharacterMovement()->AddImpulse(FVector(0,0,100000), false);
 	debug(FColor::Green, TEXT("Launched character"));
 }
 
@@ -193,7 +197,7 @@ void AFPSCharacter::Grapple()
 {
 	debug(FColor::Green, TEXT("Grappling called"));
 	FVector startTrace = GetController()->GetPawn()->GetActorLocation();
-	FVector endTrace = startTrace + GetControlRotation().Vector() * 2560;
+	FVector endTrace = startTrace + GetControlRotation().Vector() * 2000;
 	FHitResult HitData = FHitResult(ForceInit);
 	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
 	//TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
@@ -204,11 +208,13 @@ void AFPSCharacter::Grapple()
 	}
 	if (GetWorld()->LineTraceSingleByObjectType(HitData, startTrace, endTrace, TraceObjectTypes, NULL)) {
 		debug(FColor::Green, TEXT("Trace Successful"));
-		GetCharacterMovement()->GravityScale = 0.01;
+		debug(FColor::Green, TEXT("Gravity weird"));
+		GetCharacterMovement()->GravityScale = 0.001;
 		FVector LaunchVector = HitData.Location - startTrace;
-		LaunchVector.Z += 300;
+		LaunchVector.Z += 100;
 		LaunchCharacter(LaunchVector, false, false);
 		GetCharacterMovement()->GravityScale = 1;
+		debug(FColor::Green, TEXT("Gravity normal"));
 	}
 }
 
