@@ -10,6 +10,7 @@
 
 bool DEBUG = true;
 bool SLIDING = false;
+bool STUCK = false;
 
 void debug(FColor color, const FString message) {
 	if (GEngine && DEBUG)
@@ -132,6 +133,11 @@ void AFPSCharacter::FireLeft()
 
 		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 		    GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING && STUCK) {
+			GetCharacterMovement()->Velocity = Direction*3000;
+			GetCharacterMovement()->GravityScale = 1.0;
+			STUCK = false;
+		}
 		else if (!SLIDING)
 			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
@@ -162,6 +168,11 @@ void AFPSCharacter::FireRight()
 			Direction.Z = 0;
 		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 			GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING && STUCK) {
+			GetCharacterMovement()->Velocity = Direction*3000;
+			GetCharacterMovement()->GravityScale = 1.0;
+			STUCK = false;
+		}
 		else if (!SLIDING)
 			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
@@ -191,6 +202,14 @@ void AFPSCharacter::LaunchUp()
 {
 	GetCharacterMovement()->AddImpulse(FVector(0,0,100000), false);
 	debug(FColor::Green, TEXT("Launched character"));
+}
+
+void AFPSCharacter::Stick()
+{
+	GetCharacterMovement()->Velocity = FVector(0,0,0);
+	GetCharacterMovement()->GravityScale = 0.0;
+	debug(FColor::Green, TEXT("Player stuck"));
+	STUCK = true;
 }
 
 void AFPSCharacter::Grapple()

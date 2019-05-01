@@ -57,6 +57,9 @@ public:
 	UFUNCTION()
 	void Grapple();
 
+	UFUNCTION()
+	void Stick();
+
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)
     UCameraComponent* FPSCameraComponent;
