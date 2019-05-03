@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include <string>
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 
 bool DEBUG = true;
@@ -62,8 +63,8 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!GetCharacterMovement()->IsFalling()){
-		//bPressedJump = true;
+	if (GetCharacterMovement()->IsFalling() && GetActorLocation().Z < -100){
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	};
 
 }
