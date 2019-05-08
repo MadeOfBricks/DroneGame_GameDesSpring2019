@@ -2,6 +2,7 @@
 #include "DrawDebugHelpers.h"
 #include "Engine/Classes/Sound/SoundWave.h"
 #include "CoreMinimal.h"
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 
 AWinTriggerBox::AWinTriggerBox()
 {
@@ -21,8 +22,8 @@ void AWinTriggerBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor*
 	if (OtherActor && (OtherActor != this)) {
 		UE_LOG(LogTemp, Warning, TEXT("You win !!!"));
 		// add sound here fireworks
-		AWinTriggerBox::WinAudioComponent->SetSound(SoundFile);
-		AWinTriggerBox::WinAudioComponent->Play();
+		//AWinTriggerBox::WinAudioComponent->SetSound(SoundFile);
+		//AWinTriggerBox::WinAudioComponent->Play();
 	}
 }
 
@@ -31,6 +32,6 @@ void AWinTriggerBox::OnOverlapEnd(class AActor* OverlappedActor, class AActor* O
 	if (OtherActor && (OtherActor != this)) {
 		UE_LOG(LogTemp, Warning, TEXT("Game over"));
 		// exits the editor entirely
-		FGenericPlatformMisc::RequestExit(false);
+		UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 	}
 }
