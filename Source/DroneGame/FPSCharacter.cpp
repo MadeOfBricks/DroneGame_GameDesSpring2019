@@ -5,10 +5,13 @@
 #include "Camera/CameraComponent.h"
 #include "CoreMinimal.h"
 #include <string>
+#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 
-bool DEBUG = false;
+bool DEBUG = true;
 bool SLIDING = false;
+bool STUCK = false;
 
 void debug(FColor color, const FString message) {
 	if (GEngine && DEBUG)
@@ -51,6 +54,7 @@ void AFPSCharacter::BeginPlay()
 	debug(FColor::Green, FString("We are using FPSCharacter."));
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
+	GetCharacterMovement()->JumpZVelocity = 400;
 
 }
 
@@ -59,8 +63,8 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!GetCharacterMovement()->IsFalling()){
-		//bPressedJump = true;
+	if (GetCharacterMovement()->IsFalling() && GetActorLocation().Z < -100){
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	};
 
 }
@@ -86,6 +90,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&AFPSCharacter::StartCrouch);
 	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&AFPSCharacter::StopCrouch);
+
+	PlayerInputComponent->BindAction("Grapple",IE_Pressed,this,&AFPSCharacter::Grapple);
 }
 
 void AFPSCharacter::MoveRight(float Value){
@@ -126,8 +132,15 @@ void AFPSCharacter::FireLeft()
 		if (GetCharacterMovement()->Velocity.Z < 0)
 			Direction.Z = 0;
 
-		if (!SLIDING)
+		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 		    GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING && STUCK) {
+			GetCharacterMovement()->Velocity = Direction*3000;
+			GetCharacterMovement()->GravityScale = 1.0;
+			STUCK = false;
+		}
+		else if (!SLIDING)
+			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
 		debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -154,8 +167,15 @@ void AFPSCharacter::FireRight()
 		FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 		if (GetCharacterMovement()->Velocity.Z < 0)
 			Direction.Z = 0;
-		if (!SLIDING)
+		if (!SLIDING && !GetCharacterMovement()->IsFalling())
 			GetCharacterMovement()->Velocity = Direction*2000;
+		else if (!SLIDING && STUCK) {
+			GetCharacterMovement()->Velocity = Direction*3000;
+			GetCharacterMovement()->GravityScale = 1.0;
+			STUCK = false;
+		}
+		else if (!SLIDING)
+			GetCharacterMovement()->Velocity = Direction*1000;
 	} else
 	debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -181,8 +201,41 @@ void AFPSCharacter::StopCrouch()
 
 void AFPSCharacter::LaunchUp()
 {
-	GetCharacterMovement()->AddImpulse(FVector(1,1,200000), false);
+	GetCharacterMovement()->AddImpulse(FVector(0,0,100000), false);
 	debug(FColor::Green, TEXT("Launched character"));
+}
+
+void AFPSCharacter::Stick()
+{
+	GetCharacterMovement()->Velocity = FVector(0,0,0);
+	GetCharacterMovement()->GravityScale = 0.0;
+	debug(FColor::Green, TEXT("Player stuck"));
+	STUCK = true;
+}
+
+void AFPSCharacter::Grapple()
+{
+	debug(FColor::Green, TEXT("Grappling called"));
+	FVector startTrace = GetController()->GetPawn()->GetActorLocation();
+	FVector endTrace = startTrace + GetControlRotation().Vector() * 2000;
+	FHitResult HitData = FHitResult(ForceInit);
+	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
+	//TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
+	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel2));
+	if (DEBUG) {
+		DrawDebugLine(GetWorld(), startTrace, endTrace, FColor::Green, false, 1.0, 3, 5.0);
+		// LaunchCharacter(GetActorLocation() - endTrace, false, false);
+	}
+	if (GetWorld()->LineTraceSingleByObjectType(HitData, startTrace, endTrace, TraceObjectTypes, NULL)) {
+		debug(FColor::Green, TEXT("Trace Successful"));
+		debug(FColor::Green, TEXT("Gravity weird"));
+		GetCharacterMovement()->GravityScale = 0.001;
+		FVector LaunchVector = HitData.Location - startTrace;
+		LaunchVector.Z += 100;
+		LaunchCharacter(LaunchVector, false, false);
+		GetCharacterMovement()->GravityScale = 1;
+		debug(FColor::Green, TEXT("Gravity normal"));
+	}
 }
 
 	//Attempt to fire a projectile
