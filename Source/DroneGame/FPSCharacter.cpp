@@ -7,9 +7,11 @@
 #include <string>
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/Components/AudioComponent.h"
+#include "Runtime/Engine/Classes/Sound/SoundCue.h"
 
 
-bool DEBUG = true;
+bool DEBUG = false;
 bool SLIDING = false;
 bool STUCK = false;
 
@@ -44,7 +46,16 @@ AFPSCharacter::AFPSCharacter()
 
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
-
+	//USoundCue * screamAudioCue;
+	//UAudioComponent * screamComponent;
+	//static ConstructorHelpers::FObjectFinder<USoundCue> screamCue(TEXT("'/DroneGame/Content/scream_Cue.uasset"));
+	//screamAudioCue = screamCue.Object;
+	//screamComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ScreamAudioComponent"));
+	//screamComponent->bAutoActivate=false;
+	//screamComponent->AttachParent = RootComponent;
+	//if (screamAudioCue->IsValidLowLevelFast()) {
+		//screamComponent->SetSound(screamAudioCue);
+	//}
 }
 
 // Called when the game starts or when spawned
@@ -64,6 +75,7 @@ void AFPSCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (GetCharacterMovement()->IsFalling() && GetActorLocation().Z < -100){
+		//screamComponent->Play();
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	};
 
