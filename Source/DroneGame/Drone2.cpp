@@ -9,12 +9,12 @@ ADrone2::ADrone2()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Use capsule as simple collision
-	MyComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapComp"));
-	MyComp->SetSimulatePhysics(true);
+	MyComp = GetCapsuleComponent();//CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapComp"));
+	//MyComp->SetSimulatePhysics(true);
 	MyComp->SetNotifyRigidBodyCollision(true);
 
 	MyComp->BodyInstance.SetCollisionProfileName("BlockAllDynamic");
-	MyComp->OnComponentHit.AddDynamic(this,&ADrone2::OnCompHit);
+	//MyComp->OnComponentHit.AddDynamic(this,&ADrone2::OnCompHit);
 
 	//Set as root component
 	RootComponent = MyComp;
@@ -44,7 +44,7 @@ void ADrone2::Tick(float DeltaTime)
 void ADrone2::OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL)){
-		//UE_LOG(LogTemp, Warning, TEXT("Touch"));
+		UE_LOG(LogTemp, Warning, TEXT("Touch"));
 	}
 }
 

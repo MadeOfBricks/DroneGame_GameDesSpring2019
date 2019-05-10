@@ -55,7 +55,6 @@ void AFPSCharacter::BeginPlay()
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
 	GetCharacterMovement()->JumpZVelocity = 400;
-
 }
 
 // Called every frame
@@ -64,9 +63,13 @@ void AFPSCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (GetCharacterMovement()->IsFalling() && GetActorLocation().Z < -100){
-		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		RestartGame();//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	};
 
+}
+
+void AFPSCharacter::RestartGame(){
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 // Called to bind functionality to input
