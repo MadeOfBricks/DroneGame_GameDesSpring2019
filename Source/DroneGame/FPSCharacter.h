@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Runtime/Engine/Classes/Components/AudioComponent.h"
+#include "Runtime/Engine/Classes/Sound/SoundCue.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -60,9 +62,21 @@ public:
 	UFUNCTION()
 	void Stick();
 
+	UFUNCTION()
+   	void ResetLevel();
+
 	//FPS Camera
 	UPROPERTY(VisibleAnywhere)
     UCameraComponent* FPSCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USoundCue* screamAudioCue;
+	
+	UPROPERTY(VisibleAnywhere)
+	USoundCue* step1AudioCue;
+
+	UPROPERTY(VisibleAnywhere)
+	USoundCue* step2AudioCue;
 
 	// FPS Mesh, visible only to the one that owns it
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)

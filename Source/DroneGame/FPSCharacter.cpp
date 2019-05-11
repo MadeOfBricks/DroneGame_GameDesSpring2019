@@ -46,16 +46,12 @@ AFPSCharacter::AFPSCharacter()
 
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
-	//USoundCue * screamAudioCue;
-	//UAudioComponent * screamComponent;
-	//static ConstructorHelpers::FObjectFinder<USoundCue> screamCue(TEXT("'/DroneGame/Content/scream_Cue.uasset"));
-	//screamAudioCue = screamCue.Object;
-	//screamComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ScreamAudioComponent"));
-	//screamComponent->bAutoActivate=false;
-	//screamComponent->AttachParent = RootComponent;
-	//if (screamAudioCue->IsValidLowLevelFast()) {
-		//screamComponent->SetSound(screamAudioCue);
-	//}
+	static ConstructorHelpers::FObjectFinder<USoundCue> screamCue(TEXT("'/Game/scream_Cue.scream_Cue'"));
+	screamAudioCue = screamCue.Object;
+	static ConstructorHelpers::FObjectFinder<USoundCue> step1Cue(TEXT("'/Game/step1_Cue.step1_Cue'"));
+	step1AudioCue = step1Cue.Object;
+	static ConstructorHelpers::FObjectFinder<USoundCue> step2Cue(TEXT("'/Game/step2_Cue.step2_Cue'"));
+	step2AudioCue = step2Cue.Object;
 }
 
 // Called when the game starts or when spawned
@@ -76,9 +72,10 @@ void AFPSCharacter::Tick(float DeltaTime)
 
 	if (GetCharacterMovement()->IsFalling() && GetActorLocation().Z < -100){
 		//screamComponent->Play();
-		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
-	};
-
+		UGameplayStatics::PlaySound2D(GetWorld(), screamAudioCue);
+		FTimerHandle UnusedHandle;
+	 	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AFPSCharacter::ResetLevel, 1.0f, false, 1.3f);
+	}
 }
 
 // Called to bind functionality to input
@@ -153,6 +150,7 @@ void AFPSCharacter::FireLeft()
 		}
 		else if (!SLIDING)
 			GetCharacterMovement()->Velocity = Direction*1000;
+		UGameplayStatics::PlaySound2D(GetWorld(), step1AudioCue);
 	} else
 		debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -188,6 +186,7 @@ void AFPSCharacter::FireRight()
 		}
 		else if (!SLIDING)
 			GetCharacterMovement()->Velocity = Direction*1000;
+		UGameplayStatics::PlaySound2D(GetWorld(), step2AudioCue);
 	} else
 	debug(FColor::Red, TEXT("Input invalid."));
 }
@@ -234,10 +233,7 @@ void AFPSCharacter::Grapple()
 	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
 	//TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
 	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel2));
-	if (DEBUG) {
 		DrawDebugLine(GetWorld(), startTrace, endTrace, FColor::Green, false, 1.0, 3, 5.0);
-		// LaunchCharacter(GetActorLocation() - endTrace, false, false);
-	}
 	if (GetWorld()->LineTraceSingleByObjectType(HitData, startTrace, endTrace, TraceObjectTypes, NULL)) {
 		debug(FColor::Green, TEXT("Trace Successful"));
 		debug(FColor::Green, TEXT("Gravity weird"));
@@ -249,6 +245,13 @@ void AFPSCharacter::Grapple()
 		debug(FColor::Green, TEXT("Gravity normal"));
 	}
 }
+
+void AFPSCharacter::ResetLevel()
+{
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+}
+
+// Called to bind functionality to input
 
 	//Attempt to fire a projectile
 	/*
