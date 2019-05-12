@@ -36,13 +36,13 @@ AFPSCharacter::AFPSCharacter()
 	FPSCameraComponent->bUsePawnControlRotation = true;
 
 	//Create FPS Mesh component for owning player
-	FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+	//FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
 	//Only the owning player sees this mesh
-	FPSMesh->SetOnlyOwnerSee(true);
-	FPSMesh->SetupAttachment(FPSCameraComponent);
+	//FPSMesh->SetOnlyOwnerSee(true);
+	//FPSMesh->SetupAttachment(FPSCameraComponent);
 	//Disable some enivron shadowing to preserve the illusion of one mesh
-	FPSMesh->bCastDynamicShadow = false;
-	FPSMesh->CastShadow = false;
+	//FPSMesh->bCastDynamicShadow = false;
+	//FPSMesh->CastShadow = false;
 
 	//The owning player doesn't see regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
