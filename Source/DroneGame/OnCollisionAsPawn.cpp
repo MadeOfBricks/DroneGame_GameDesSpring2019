@@ -53,7 +53,8 @@ UPrimitiveComponent* OtherComp, FVector NormalImpulse
 		if (OtherActor->GetName() == "BPFPSCharacter_C_0")
 			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Gottem")));
 			AFPSCharacter *PlayerActor = Cast<AFPSCharacter>(OtherActor);
-			PlayerActor->ResetLevel();
+			if (PlayerActor != nullptr)
+				PlayerActor->ResetLevel();
 		/*
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
 		if ((*OtherActor->GetName()) == TEXT("BPFPSCharacter_C_0")){

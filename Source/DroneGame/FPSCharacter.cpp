@@ -240,6 +240,7 @@ void AFPSCharacter::Grapple()
 		GetCharacterMovement()->GravityScale = 0.001;
 		FVector LaunchVector = HitData.Location - startTrace;
 		LaunchVector.Z += 100;
+		GetCharacterMovement()->Velocity.Z = 0;
 		LaunchCharacter(LaunchVector, false, false);
 		GetCharacterMovement()->GravityScale = 1;
 		debug(FColor::Green, TEXT("Gravity normal"));
