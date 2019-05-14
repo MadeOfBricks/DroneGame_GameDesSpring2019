@@ -89,9 +89,6 @@ Content/AutomotiveMaterials/Textures/BrakeRotor/T_CarbonCeramic_N.uasset
 Content/AutomotiveMaterials/Textures/BrakeRotor/T_CarbonCeramic_R.uasset
 Content/AutomotiveMaterials/Textures/CarbonFiber/T_CarbonFiber_Twill_N.uasset
 Content/AutomotiveMaterials/Textures/CarbonFiber/T_CarbonFiber_Twill_R.uasset
-Content/AutomotiveMaterials/Textures/CarbonFiber/T_MetalFlakes_N.uasset
-Content/AutomotiveMaterials/Textures/CarPaint/T_Bump_N.uasset
-Content/AutomotiveMaterials/Textures/CarPaint/T_FlakeMask.uasset
 Content/AutomotiveMaterials/Textures/ExhaustFinish/T_Metal_BC.uasset
 Content/AutomotiveMaterials/Textures/Fabric/T_Fabric_ArchLiner_D.uasset
 Content/AutomotiveMaterials/Textures/Fabric/T_Fabric_ArchLiner_N.uasset
@@ -173,7 +170,6 @@ Content/AutomotiveMaterials/Materials/Leather/M_Leather.uasset
 Content/AutomotiveMaterials/Materials/Glass/MI_Glass.uasset
 Content/AutomotiveMaterials/Materials/Glass/M_Glass.uasset
 Content/AutomotiveMaterials/Materials/Functions/WorldAlignedTexture_Bumpoffset.uasset
-Content/AutomotiveMaterials/Materials/Functions/MF_Sparkle_random.uasset
 Content/AutomotiveMaterials/Materials/Functions/MF_BrakeRotor_Radial_Iron.uasset
 Content/AutomotiveMaterials/Materials/Functions/MatLayerBlend_Standard_BlendAngleCorrectedNormal.uasset
 Content/AutomotiveMaterials/Materials/Fabric/MI_Fabric_ArchLiner.uasset
